@@ -681,6 +681,7 @@ GameObject:
   - component: {fileID: 548929711}
   - component: {fileID: 548929710}
   - component: {fileID: 548929715}
+  - component: {fileID: 548929718}
   - component: {fileID: 548929717}
   - component: {fileID: 548929714}
   - component: {fileID: 548929716}
@@ -780,7 +781,7 @@ Transform:
   m_GameObject: {fileID: 548929709}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -856,6 +857,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   healthPoints: 10
+--- !u!114 &548929718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548929709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba2efe70ff5f144a859fa9ed8d6e75e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DragMoveAmplified
+  cam: {fileID: 0}
+  amplification: 2
+  worldPerPixel: 0.01
+  xLimits: {x: -6.4, y: 6.4}
+  zLimits: {x: -13, y: 13}
 --- !u!1 &617429231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1961,6 +1979,10 @@ PrefabInstance:
     - target: {fileID: 8170153791668043269, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
       propertyPath: m_Name
       value: Floating Joystick
+      objectReference: {fileID: 0}
+    - target: {fileID: 8170153791668043269, guid: 0d230cc8be529a542a08cb878ab14b18, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

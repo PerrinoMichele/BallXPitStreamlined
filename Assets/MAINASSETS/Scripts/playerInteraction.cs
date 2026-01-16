@@ -14,7 +14,7 @@ public class playerInteraction : MonoBehaviour
     private float joystickX;
     private float joystickY;
     private Vector3 lookDir;
-    private bool isShooting = false;
+    private bool spawnRoutineRunning = false;
     private int ballCount = 4;
 
     //private List<GameObject> balls = new List<GameObject>();
@@ -23,71 +23,27 @@ public class playerInteraction : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody>();
         rotation = Quaternion.Euler(0, 0, 0);
-
-    }
-
-    void Update()
-    {
-        joystickX = joystick.Horizontal;
-        joystickY = joystick.Vertical;
-        lookDir = rotation * new Vector3(joystickX, 0f, joystickY);
-    }
-
-    void FixedUpdate()
-    {
-        if (!isShooting)
-        {
-            StartCoroutine(SpawnBalls());
-        }
-        if (lookDir != Vector3.zero)
-        {
-            Move();
-        }
-        else if (lookDir == Vector3.zero)
-        {
-            Stop();
-        }
-        //Move();
-        //if (!isShooting)
-        //    StartCoroutine(SpawnBalls());
-    }
-
-    void Move()
-    {
-        Vector3 input = new Vector3(joystickX, 0f, joystickY);
-
-        rigidbody.linearVelocity =
-            rotation * new Vector3(
-                input.x * moveSpeed,
-                rigidbody.linearVelocity.y,
-                input.z * moveSpeed
-            );
-    }
-
-    void Stop()
-    {
-        transform.rotation = Quaternion.identity;
-        rigidbody.linearVelocity = new Vector3(0, 0, 0);
+        StartCoroutine(SpawnBalls());
     }
 
     IEnumerator SpawnBalls()
     {
+        spawnRoutineRunning = true;
+
+        while (ballCount > 0)
         {
-            isShooting = true;
-
-            while (ballCount > 0)
-            {
-                Instantiate(ball, transform.position + Vector3.forward, Quaternion.identity);
-                ballCount--;
-                yield return new WaitForSeconds(0.5f);
-            }
-
-            isShooting = false;
+            ballCount--;
+            yield return new WaitForSeconds(1f);
+            Instantiate(ball, transform.position + Vector3.forward, Quaternion.identity);
         }
+
+        spawnRoutineRunning = false;
     }
 
     public void AddBall()
     {
         ballCount++;
+        if (!spawnRoutineRunning)
+            StartCoroutine(SpawnBalls());
     }
 }
