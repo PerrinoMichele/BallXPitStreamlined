@@ -1,6 +1,7 @@
 using UnityEngine;
+using System.Collections;
 
-public class ball : MonoBehaviour
+public class Ball : MonoBehaviour
 {
     public float speed = 16f;
 
@@ -57,7 +58,7 @@ public class ball : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            other.GetComponent<playerInteraction>().AddBall();
+            other.GetComponent<BallsHoldingAndShooting>().AddBall();
             Destroy(gameObject);
         }
     }

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class spawnEnemy : MonoBehaviour
+public class EnemySpawner : MonoBehaviour
 {
     public float timeBetweenSpawns;
     public float spawnPercentage;
