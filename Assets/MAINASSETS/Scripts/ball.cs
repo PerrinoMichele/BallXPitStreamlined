@@ -10,8 +10,12 @@ public class Ball : MonoBehaviour
     public float magnetSpeed = 10f;
     bool isMagneted = false;
     Transform player;
+    
+    private float hitSpeedMultiplier = 1;
+    private float bounceRandomness = 0.05f;
+    private Vector3 lastVelocity = Vector3.zero;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.forward * speed;
@@ -19,38 +23,46 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
         if (collision.gameObject.tag == "Enemy")
         {
             collision.gameObject.GetComponent<Health>().TakeDamage(1);
+            ChangeDirection(collision);
 
+            var enemy = collision.gameObject.GetComponent<Enemy>();
+            enemy.PunchScale();
         }
-
-        if (collision.gameObject.CompareTag("Wall"))
+        else if (collision.gameObject.CompareTag("Wall"))
         {
-            Vector3 v = rb.linearVelocity.normalized;
-
-            v.z = -Mathf.Max(Mathf.Abs(v.z), .3f);
-
-            rb.linearVelocity = v.normalized * speed;
+            ChangeDirection(collision);
         }
-
-        if (collision.gameObject.tag == "BottomWall")
+        else if (collision.gameObject.tag == "BottomWall")
         {
-            {
-                StartMagnet();
-                return;
-            }
+            StartMagnet();
         }
     }
 
-    void StartMagnet()
+    private void ChangeDirection(Collision collision)
+    {
+        if (collision.contactCount > 0)
+        {
+            hitSpeedMultiplier += 0.15f;
+            Vector3 normal = collision.contacts[0].normal;
+            Vector3 randomOffset = new Vector3(Random.Range(bounceRandomness, bounceRandomness), 0,
+                Random.Range(-bounceRandomness, bounceRandomness)
+            );
+
+            Vector3 modifiedNormal = (normal + randomOffset).normalized;
+            Vector3 incomingDir = lastVelocity.normalized;
+            Vector3 reflectedDir = Vector3.Reflect(incomingDir, modifiedNormal);
+            rb.linearVelocity = reflectedDir * speed * hitSpeedMultiplier;
+        }
+    }
+
+    private void StartMagnet()
     {
         isMagneted = true;
-
         rb.linearVelocity = Vector3.zero;
-        rb.isKinematic = true; // stop physics completely
-
+        rb.isKinematic = true; 
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
@@ -59,6 +71,7 @@ public class Ball : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             other.GetComponent<BallsHoldingAndShooting>().AddBall();
+            hitSpeedMultiplier = 1.0f;
             Destroy(gameObject);
         }
     }
@@ -67,16 +80,10 @@ public class Ball : MonoBehaviour
     {
         if (isMagneted)
         {
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                player.position,
-                magnetSpeed * Time.fixedDeltaTime
-            );
-            return;
+            transform.position = Vector3.MoveTowards(transform.position, player.position, 
+                magnetSpeed * Time.fixedDeltaTime);
         }
 
-        speed += .03f;
-        // Keep speed constant (classic arcade feel)
-        rb.linearVelocity = rb.linearVelocity.normalized * speed;
+        lastVelocity = rb.linearVelocity;
     }
 }
