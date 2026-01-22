@@ -70,8 +70,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49ea881a1850bb841a56e5e9acca84a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
+  isTakingDamage: 0
   healthPoints: 5
   getHitSfx: {fileID: 8300000, guid: 882c8b2b7bb6a3f4398e5bac047cd1ab, type: 3}
+  audioSource: {fileID: 0}
 --- !u!114 &1095854070871793604
 MonoBehaviour:
   m_ObjectHideFlags: 0

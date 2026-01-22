@@ -1,7 +1,9 @@
+using DG.Tweening;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class BallsHoldingAndShooting : MonoBehaviour
 {
@@ -18,7 +20,7 @@ public class BallsHoldingAndShooting : MonoBehaviour
 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        audioSource = FindFirstObjectByType<AudioSource>();
         StartCoroutine(SpawnBalls());
     }
 
@@ -34,9 +36,10 @@ public class BallsHoldingAndShooting : MonoBehaviour
             audioSource.volume = .15f;
             audioSource.pitch = Random.Range(0.5f, 0.8f);
             audioSource.PlayOneShot(shootSFX);
-            StopCoroutine(PunchVFX());
-            StartCoroutine(PunchVFX());
-
+            if (!DOTween.IsTweening(transform))
+            {
+                transform.DOPunchScale(Vector3.one * 0.4f, 0.15f);
+            }
             yield return new WaitForSeconds(timeBetweenShots);
         }
 
@@ -49,12 +52,5 @@ public class BallsHoldingAndShooting : MonoBehaviour
 
         if (!spawnRoutineRunning)
             StartCoroutine(SpawnBalls());
-    }
-
-    private IEnumerator PunchVFX()
-    {
-        GetComponent<MeshRenderer>().transform.localScale = Vector3.one * 1.15f;
-        yield return new WaitForSeconds(0.08f);
-        GetComponent<MeshRenderer>().transform.localScale = Vector3.one;
     }
 }
