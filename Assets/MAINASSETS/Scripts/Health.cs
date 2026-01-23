@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int healthPoints;
+    public float healthPoints;
     public AudioClip getHitSfx;
 
     AudioSource audioSource;
@@ -21,13 +21,13 @@ public class Health : MonoBehaviour
         baseColor = rend.material.color;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         audioSource.volume = .15f;
         audioSource.pitch = Random.Range(0.9f, 1.1f);
         audioSource.PlayOneShot(getHitSfx);
 
-        if (healthPoints > 1)
+        if (healthPoints > 0)
         {
             StopCoroutine(PunchFlashVFX());
             StartCoroutine(PunchFlashVFX());

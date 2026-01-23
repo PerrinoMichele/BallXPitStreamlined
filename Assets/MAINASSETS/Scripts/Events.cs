@@ -10,4 +10,17 @@ namespace Core.Events
             XP = xp;
         }
     }
+    
+    
+    public class EnableBoosterPanelEvent : IGameEvent { }
+
+    public class BoosterCollectedEvent : IGameEvent
+    {
+        public BoosterData BoosterData { get; set; }
+        
+        public BoosterCollectedEvent(BoosterData boosterData)
+        {
+            BoosterData = boosterData;
+        }
+    }
 }

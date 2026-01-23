@@ -12,6 +12,9 @@ public class DragMoveAmplified : MonoBehaviour
     Vector2 startFinger;
     Vector3 startPos;
 
+    public float PlayerSpeed =>
+        BoostersController.Instance.GetBoosterImplementedValue(BoosterType.PlayerSpeed, amplification);
+
     bool PointerDown() =>
     Input.GetMouseButton(0) || Input.touchCount > 0;
 
@@ -47,7 +50,7 @@ public class DragMoveAmplified : MonoBehaviour
         }
         else if (dragging)
         {
-            Vector2 d = (p - startFinger) * amplification;
+            Vector2 d = (p - startFinger) * PlayerSpeed;
 
             Vector3 target = startPos + new Vector3(d.x, 0f, d.y) * worldPerPixel;
             target.x = Mathf.Clamp(target.x, xLimits.x, xLimits.y);

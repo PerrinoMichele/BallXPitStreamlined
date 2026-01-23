@@ -33,6 +33,8 @@ public class XPBarController : MonoBehaviour
                 Debug.Log("Need to Show Booster Screen");
                 currentXPAmount = 0;
                 barImage.fillAmount = 0.0f;
+                
+                EventBus.Publish(new EnableBoosterPanelEvent());
             }
         });
         

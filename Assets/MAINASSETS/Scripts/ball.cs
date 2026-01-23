@@ -15,17 +15,20 @@ public class Ball : MonoBehaviour
     private float bounceRandomness = 0.05f;
     private Vector3 lastVelocity = Vector3.zero;
 
+    public float BallSpeed => BoostersController.Instance.GetBoosterImplementedValue(BoosterType.BallSpeed, speed);
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = Vector3.forward * speed;
+        rb.linearVelocity = Vector3.forward * BallSpeed;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            collision.gameObject.GetComponent<Health>().TakeDamage(1);
+            var damage = BoostersController.Instance.GetBoosterImplementedValue(BoosterType.BallDamage, 1);
+            collision.gameObject.GetComponent<Health>().TakeDamage(damage);
             ChangeDirection(collision);
 
             var enemy = collision.gameObject.GetComponent<Enemy>();
@@ -54,7 +57,7 @@ public class Ball : MonoBehaviour
             Vector3 modifiedNormal = (normal + randomOffset).normalized;
             Vector3 incomingDir = lastVelocity.normalized;
             Vector3 reflectedDir = Vector3.Reflect(incomingDir, modifiedNormal);
-            rb.linearVelocity = reflectedDir * speed * hitSpeedMultiplier;
+            rb.linearVelocity = reflectedDir * BallSpeed * hitSpeedMultiplier;
         }
     }
 
