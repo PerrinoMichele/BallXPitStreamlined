@@ -33,7 +33,11 @@ public class Health : MonoBehaviour
             StartCoroutine(PunchFlashVFX());
             healthPoints -= damage;
         }
-        else { Destroy(gameObject); }
+        else
+        {
+            XPSpawnController.Instance.SpawnXP(transform.position);
+            Destroy(gameObject); 
+        }
     }
 
     private IEnumerator PunchFlashVFX()
