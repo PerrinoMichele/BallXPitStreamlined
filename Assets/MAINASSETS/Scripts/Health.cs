@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
     public bool isTakingDamage = false;
     public int healthPoints;
     public AudioClip getHitSfx;
+    public Image fill;
 
 
     public AudioSource audioSource;
@@ -55,6 +57,8 @@ public class Health : MonoBehaviour
 
         else if (gameObject.tag == "Player")
         {
+            fill.fillAmount = (float)healthPoints / 10;
+            print(fill.fillAmount);
             rend.material.color = Color.red;
         }
         
