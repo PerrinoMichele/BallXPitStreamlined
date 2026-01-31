@@ -12,8 +12,7 @@ public class DragMoveAmplified : MonoBehaviour
     Vector2 startFinger;
     Vector3 startPos;
 
-    public float PlayerSpeed =>
-        BoostersController.Instance.GetBoosterImplementedValue(BoosterType.PlayerSpeed, amplification);
+    public float PlayerSpeed => amplification;
 
     bool PointerDown() =>
     Input.GetMouseButton(0) || Input.touchCount > 0;

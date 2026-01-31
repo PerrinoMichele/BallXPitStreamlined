@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -7618011211314105226}
   - component: {fileID: -5531084095456444730}
   m_Layer: 6
-  m_Name: Iron Ball
+  m_Name: Lightning Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c93d1a12daf394cd78328b34b323d899, type: 2}
+  - {fileID: 2100000, guid: 4b4c404e41c7c4ad6aade1eef32cb8f2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -128,10 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baa2c1ba052bd34fa14a586fd522d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  BallType: 2
+  BallType: 5
   speed: 10
   magnetSpeed: 10
-  defaultDamage: 2
 --- !u!54 &-7618011211314105226
 Rigidbody:
   m_ObjectHideFlags: 0

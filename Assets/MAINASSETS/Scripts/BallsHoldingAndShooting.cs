@@ -17,7 +17,6 @@ public class BallTypePrefab
 public class BallsHoldingAndShooting : MonoBehaviour
 {
     [SerializeField] private BallTypePrefab[] ballTypePrefabsList;
-    public GameObject ball;
     public float timeBetweenShots = .7f;
     public AudioClip shootSFX;
 
@@ -28,10 +27,10 @@ public class BallsHoldingAndShooting : MonoBehaviour
 
     void Start()
     {
-        ballTypeList = new List<BallType>() { BallType.Normal, BallType.Normal, BallType.Normal, BallType.Normal};
+        ballTypeList = new List<BallType>() { BallType.HorizontalLaser, BallType.VerticalLaser, BallType.HorizontalLaser, BallType.VerticalLaser };
         audioSource = GetComponent<AudioSource>();
         StartCoroutine(SpawnBalls());
-        
+
         EventBus.Subscribe<BallCollectedEvent>(AddBall);
     }
 
@@ -57,7 +56,7 @@ public class BallsHoldingAndShooting : MonoBehaviour
             StartCoroutine(PunchVFX());
 
             yield return new WaitForSeconds(timeBetweenShots);
-            
+
             ballTypeList.RemoveAt(0);
         }
 
@@ -70,14 +69,14 @@ public class BallsHoldingAndShooting : MonoBehaviour
         if (!spawnRoutineRunning)
             StartCoroutine(SpawnBalls());
     }
-    
+
     public void AddBall(BallCollectedEvent ballCollectedEvent)
     {
         ballTypeList.Add(ballCollectedEvent.BallType);
         if (!spawnRoutineRunning)
             StartCoroutine(SpawnBalls());
     }
-    
+
 
     private IEnumerator PunchVFX()
     {

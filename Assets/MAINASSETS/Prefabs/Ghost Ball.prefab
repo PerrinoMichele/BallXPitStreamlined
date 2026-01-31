@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baa2c1ba052bd34fa14a586fd522d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  BallType: 1
   speed: 10
   magnetSpeed: 10
 --- !u!54 &-7618011211314105226
