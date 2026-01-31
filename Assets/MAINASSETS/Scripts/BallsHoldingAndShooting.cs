@@ -6,6 +6,7 @@ using System.Linq;
 using Core.Events;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using DG.Tweening;
 
 [Serializable]
 public class BallTypePrefab
@@ -13,6 +14,7 @@ public class BallTypePrefab
     public BallType BallType;
     public GameObject BallPrefab;
 }
+
 
 public class BallsHoldingAndShooting : MonoBehaviour
 {
@@ -27,8 +29,9 @@ public class BallsHoldingAndShooting : MonoBehaviour
 
     void Start()
     {
-        ballTypeList = new List<BallType>() { BallType.HorizontalLaser, BallType.VerticalLaser, BallType.HorizontalLaser, BallType.VerticalLaser };
+        ballTypeList = new List<BallType>() { BallType.Normal, BallType.Normal, BallType.Normal, BallType.Normal };
         audioSource = GetComponent<AudioSource>();
+
         StartCoroutine(SpawnBalls());
 
         EventBus.Subscribe<BallCollectedEvent>(AddBall);
@@ -52,9 +55,10 @@ public class BallsHoldingAndShooting : MonoBehaviour
             audioSource.volume = .15f;
             audioSource.pitch = Random.Range(0.5f, 0.8f);
             audioSource.PlayOneShot(shootSFX);
-            StopCoroutine(PunchVFX());
-            StartCoroutine(PunchVFX());
-
+            if (!DOTween.IsTweening(transform))
+            {
+                transform.DOPunchScale(Vector3.one * 0.4f, 0.15f);
+            }
             yield return new WaitForSeconds(timeBetweenShots);
 
             ballTypeList.RemoveAt(0);

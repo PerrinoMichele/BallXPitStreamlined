@@ -1,14 +1,41 @@
 using DG.Tweening;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
     public static float Speed = 0.5f;
+    private bool isAttacking = false;
+    private GameObject player;
 
+    private void Start()
+    {
+        player = FindFirstObjectByType<BallsHoldingAndShooting>().gameObject;
+    }
     void Update()
     {
         transform.position += Vector3.back * Speed * Time.deltaTime;
+
+        if (transform.position.z <= -17 && !player.GetComponent<Health>().isTakingDamage)
+        {
+            player.gameObject.GetComponent<Health>().TakeDamage(1);
+            Destroy(gameObject);
+        }
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            if (!player.GetComponent<Health>().isTakingDamage)
+            {
+                player.gameObject.GetComponent<Health>().TakeDamage(1);
+            }
+        }
+    }
+
 
     public void PunchScale()
     {

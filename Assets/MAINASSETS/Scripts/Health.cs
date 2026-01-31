@@ -1,12 +1,17 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
     public float healthPoints;
+    public bool isTakingDamage = false;
     public AudioClip getHitSfx;
+    public Image fill;
 
-    AudioSource audioSource;
+
+    public AudioSource audioSource;
     Renderer rend;
     MeshRenderer mesh;
     Vector3 originalScale;
@@ -15,6 +20,8 @@ public class Health : MonoBehaviour
     void Awake()
     {
         audioSource = FindFirstObjectByType<AudioSource>();
+
+
         rend = GetComponentInChildren<Renderer>();
         mesh = GetComponentInChildren<MeshRenderer>();
         originalScale = mesh.transform.localScale;
@@ -36,14 +43,13 @@ public class Health : MonoBehaviour
         else
         {
             XPSpawnController.Instance.SpawnXP(transform.position);
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
     }
 
     private IEnumerator PunchFlashVFX()
     {
-        mesh.transform.localScale = originalScale * 1.15f;
-
+        isTakingDamage = true;
         if (gameObject.tag == "Enemy")
         {
             rend.material.color = Color.white;
@@ -51,12 +57,15 @@ public class Health : MonoBehaviour
 
         else if (gameObject.tag == "Player")
         {
+            fill.fillAmount = (float)healthPoints / 10;
+            print(fill.fillAmount);
             rend.material.color = Color.red;
         }
-        
+
         yield return new WaitForSeconds(0.08f);
         rend.material.color = baseColor;
-        mesh.transform.localScale = originalScale;
+        yield return new WaitForSeconds(.5f);
+        isTakingDamage = false;
     }
 
 }

@@ -8,6 +8,7 @@ public class DragMoveAmplified : MonoBehaviour
     public Vector2 xLimits = new Vector2(-4f, 4f);
     public Vector2 zLimits = new Vector2(-8f, 8f);
 
+    Rigidbody rb;
     bool dragging;
     Vector2 startFinger;
     Vector3 startPos;
@@ -32,12 +33,18 @@ public class DragMoveAmplified : MonoBehaviour
 
     void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         if (!cam) cam = Camera.main;
     }
 
     void Update()
     {
-        if (!PointerDown()) { dragging = false; return; }
+        if (!PointerDown())
+        {
+            dragging = false;
+            if (rb) rb.linearVelocity = Vector3.zero; // STOP movement
+            return;
+        }
 
         Vector2 p = PointerPos();
 
@@ -57,7 +64,11 @@ public class DragMoveAmplified : MonoBehaviour
 
             transform.position = target;
 
-            if (PointerUp()) dragging = false;
+            if (PointerUp())
+            {
+                dragging = false;
+                if (rb) rb.linearVelocity = Vector3.zero;
+            }
         }
     }
 }
