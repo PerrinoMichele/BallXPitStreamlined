@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+public enum BallType { Normal, Ghost, Iron }
 public class Ball : MonoBehaviour
 {
+    public BallType BallType;
     public float speed = 16f;
 
     Rigidbody rb;
@@ -15,12 +17,11 @@ public class Ball : MonoBehaviour
     private float bounceRandomness = 0.05f;
     private Vector3 lastVelocity = Vector3.zero;
 
-    public float BallSpeed => BoostersController.Instance.GetBoosterImplementedValue(BoosterType.BallSpeed, speed);
-
     private void Start()
     {
+        speed = BallType == BallType.Iron ? speed * 1.5f : speed;
         rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = Vector3.forward * BallSpeed;
+        rb.linearVelocity = Vector3.forward * speed;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -28,8 +29,13 @@ public class Ball : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             var damage = BoostersController.Instance.GetBoosterImplementedValue(BoosterType.BallDamage, 1);
+            damage = BallType == BallType.Iron ? damage * 2 : damage;
             collision.gameObject.GetComponent<Health>().TakeDamage(damage);
-            ChangeDirection(collision);
+
+            if (BallType != BallType.Ghost)
+            {
+                ChangeDirection(collision);
+            }
 
             var enemy = collision.gameObject.GetComponent<Enemy>();
             enemy.PunchScale();
@@ -57,7 +63,7 @@ public class Ball : MonoBehaviour
             Vector3 modifiedNormal = (normal + randomOffset).normalized;
             Vector3 incomingDir = lastVelocity.normalized;
             Vector3 reflectedDir = Vector3.Reflect(incomingDir, modifiedNormal);
-            rb.linearVelocity = reflectedDir * BallSpeed * hitSpeedMultiplier;
+            rb.linearVelocity = reflectedDir * speed * hitSpeedMultiplier;
         }
     }
 
@@ -73,7 +79,7 @@ public class Ball : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            other.GetComponent<BallsHoldingAndShooting>().AddBall();
+            other.GetComponent<BallsHoldingAndShooting>().AddBall(BallType);
             hitSpeedMultiplier = 1.0f;
             Destroy(gameObject);
         }

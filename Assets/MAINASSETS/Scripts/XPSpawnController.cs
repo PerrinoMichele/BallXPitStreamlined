@@ -42,7 +42,7 @@ public class XPSpawnController : MonoBehaviour
     {
         foreach (var xpToCollect in availableXPsToCollect)
         {
-            if ((xpToCollect.transform.position - characterPosition).sqrMagnitude <= 10.0f)
+            if ((xpToCollect.transform.position - characterPosition).sqrMagnitude <= 1.0f)
             {
                 if (DOTween.IsTweening(xpToCollect.transform)) return;
                 xpToCollect.transform.DOMove(characterPosition, 0.05f).OnComplete(() =>

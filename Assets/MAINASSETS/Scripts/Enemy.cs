@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed;
+    public static float Speed = 0.5f;
 
     void Update()
     {
-        transform.position += Vector3.back * speed * Time.deltaTime;
+        transform.position += Vector3.back * Speed * Time.deltaTime;
     }
 
     public void PunchScale()
