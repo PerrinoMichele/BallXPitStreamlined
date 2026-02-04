@@ -2,7 +2,12 @@ using System;
 using UnityEngine;
 
 
-public enum BoosterType { PlayerSpeed, BallSpeed, BallDamage }
+public enum BoosterType
+{
+    GhostBall, IronBall, VerticalLaserBall, HorizontalLaserBall, PoisonBall, VampireBall,
+    LightningBall, EarthQuakeBall, BroodMotherBall, EggSackBall, DarkBall
+}
+
 [Serializable]
 public class BoosterData
 {

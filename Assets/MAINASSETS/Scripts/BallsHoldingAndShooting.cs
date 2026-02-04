@@ -1,55 +1,86 @@
+using System;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Core.Events;
 using UnityEngine;
+using Random = UnityEngine.Random;
+using DG.Tweening;
+
+[Serializable]
+public class BallTypePrefab
+{
+    public BallType BallType;
+    public GameObject BallPrefab;
+}
+
 
 public class BallsHoldingAndShooting : MonoBehaviour
 {
-    public GameObject ball;
+    [SerializeField] private BallTypePrefab[] ballTypePrefabsList;
     public float timeBetweenShots = .7f;
     public AudioClip shootSFX;
 
     AudioSource audioSource;
     private bool spawnRoutineRunning = false;
-    private int ballCount = 4;
 
-    //NOTE: We will need held balls to be part of a list so we can alternate baby balls with special balls, first in first out like in Ball X Pit
-    //private List<GameObject> balls = new List<GameObject>();
+    private List<BallType> ballTypeList;
 
     void Start()
     {
+        ballTypeList = new List<BallType>() { BallType.Normal, BallType.Normal, BallType.Normal, BallType.Normal };
         audioSource = GetComponent<AudioSource>();
+
         StartCoroutine(SpawnBalls());
+
+        EventBus.Subscribe<BallCollectedEvent>(AddBall);
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<BallCollectedEvent>(AddBall);
+
     }
 
     IEnumerator SpawnBalls()
     {
         spawnRoutineRunning = true;
 
-        while (ballCount > 0)
+        while (ballTypeList.Count > 0)
         {
-            ballCount--;
-            Instantiate(ball, transform.position + Vector3.forward, Quaternion.identity);
+            var prefab = ballTypePrefabsList.FirstOrDefault(ball => ball.BallType == ballTypeList[0]).BallPrefab;
+            Instantiate(prefab, transform.position + Vector3.forward, Quaternion.identity);
 
             audioSource.volume = .15f;
             audioSource.pitch = Random.Range(0.5f, 0.8f);
             audioSource.PlayOneShot(shootSFX);
-            StopCoroutine(PunchVFX());
-            StartCoroutine(PunchVFX());
-
+            if (!DOTween.IsTweening(transform))
+            {
+                transform.DOPunchScale(Vector3.one * 0.4f, 0.15f);
+            }
             yield return new WaitForSeconds(timeBetweenShots);
+
+            ballTypeList.RemoveAt(0);
         }
 
         spawnRoutineRunning = false;
     }
 
-    public void AddBall()
+    public void AddBall(BallType ballType)
     {
-        ballCount++;
-
+        ballTypeList.Add(ballType);
         if (!spawnRoutineRunning)
             StartCoroutine(SpawnBalls());
     }
+
+    public void AddBall(BallCollectedEvent ballCollectedEvent)
+    {
+        ballTypeList.Add(ballCollectedEvent.BallType);
+        if (!spawnRoutineRunning)
+            StartCoroutine(SpawnBalls());
+    }
+
 
     private IEnumerator PunchVFX()
     {

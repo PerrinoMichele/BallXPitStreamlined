@@ -23,4 +23,14 @@ namespace Core.Events
             BoosterData = boosterData;
         }
     }
+    
+    public class BallCollectedEvent : IGameEvent
+    {
+        public BallType BallType { get; set; }
+        
+        public BallCollectedEvent(BallType ballType)
+        {
+            BallType = ballType;
+        }
+    }
 }

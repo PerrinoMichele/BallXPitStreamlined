@@ -7,7 +7,7 @@ using UnityEngine;
 public class BoostersController : MonoBehaviour
 {
     public static BoostersController Instance;
-    
+
     private Dictionary<BoosterData, int> activeBoosterData;
 
     private void Awake()
@@ -35,7 +35,7 @@ public class BoostersController : MonoBehaviour
         var stacks = matching.Sum(kvp => kvp.Value);
         if (stacks == 0) return defaultValue;
 
-        float percentPerStack = matching[0].Key.PercentageToIncrease; 
+        float percentPerStack = matching[0].Key.PercentageToIncrease;
 
         float increase = defaultValue * (percentPerStack / 100f) * stacks;
         return defaultValue + increase;
@@ -48,6 +48,45 @@ public class BoostersController : MonoBehaviour
         if (!activeBoosterData.TryAdd(boosterData, 1))
         {
             activeBoosterData[boosterData] += 1;
+        }
+
+        switch (boosterData.BoosterType)
+        {
+            case BoosterType.GhostBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.Ghost));
+                break;
+            case BoosterType.IronBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.Iron));
+                break;
+            case BoosterType.VerticalLaserBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.VerticalLaser));
+                break;
+            case BoosterType.HorizontalLaserBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.HorizontalLaser));
+                break;
+            case BoosterType.PoisonBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.Poison));
+                break;
+            case BoosterType.VampireBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.Vampire));
+                break;
+            case BoosterType.LightningBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.Lightning));
+                break;
+            case BoosterType.EarthQuakeBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.EarthQuake));
+                break;
+            case BoosterType.BroodMotherBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.BroodMother));
+                break;
+            case BoosterType.EggSackBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.EggSack));
+                break;
+            case BoosterType.DarkBall:
+                EventBus.Publish(new BallCollectedEvent(BallType.Dark));
+                break;
+            default:
+                break;
         }
     }
 }
