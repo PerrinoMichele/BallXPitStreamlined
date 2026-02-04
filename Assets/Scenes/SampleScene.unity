@@ -1137,6 +1137,9 @@ MonoBehaviour:
     m_Bits: 384
   mainRay: {fileID: 1166414889}
   normalRay: {fileID: 1250342569}
+  projectileDiameter: 0.5
+  maxDistance: 80
+  bounceLength: 2
 --- !u!82 &548929722
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2549,22 +2552,13 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.21576756
+        value: 0.2614066
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.64976513
-        value: 0.21576756
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -2843,22 +2837,13 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.21576762
+        value: 0.21161723
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.6148698
-        value: 0.21576762
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -3137,7 +3122,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9168888775065502063, guid: 39959f9577194344aba5b11cbfb1973a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.17659
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9168888775065502063, guid: 39959f9577194344aba5b11cbfb1973a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3298,7 +3283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4303537443519600942, guid: 8c9362f54545ac945b2ff79fee18cb54, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.17659
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4303537443519600942, guid: 8c9362f54545ac945b2ff79fee18cb54, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3673,6 +3658,9 @@ MonoBehaviour:
   xpPrefab: {fileID: 5072871690626089826, guid: fc10ed217186a4fb2911202d4bac5bbb, type: 3}
   xpParticleEffectsParentContainer: {fileID: 1022507507}
   targetAttractorTransform: {fileID: 1032134657}
+  randomizeSpawnPosition: 1
+  spawnOffsetRadius: 0.5
+  randomizeSpawnRotation: 1
 --- !u!4 &1752258730
 Transform:
   m_ObjectHideFlags: 0

@@ -154,9 +154,18 @@ public class Ball : MonoBehaviour
         {
             hitSpeedMultiplier += 0.15f;
             Vector3 normal = collision.contacts[0].normal;
-            Vector3 randomOffset = new Vector3(Random.Range(bounceRandomness, bounceRandomness), 0,
-                Random.Range(-bounceRandomness, bounceRandomness)
-            );
+
+            // Se la collisione è contro un nemico, rimbalzo deterministico (nessun offset casuale).
+            // Altrimenti manteniamo il comportamento precedente con randomness.
+            Vector3 randomOffset = Vector3.zero;
+            if (!collision.gameObject.CompareTag("Enemy"))
+            {
+                randomOffset = new Vector3(
+                    Random.Range(-bounceRandomness, bounceRandomness),
+                    0f,
+                    Random.Range(-bounceRandomness, bounceRandomness)
+                );
+            }
 
             Vector3 modifiedNormal = (normal + randomOffset).normalized;
             Vector3 incomingDir = lastVelocity.normalized;

@@ -18,6 +18,11 @@ public class XPSpawnController : MonoBehaviour
     [SerializeField] private RectTransform targetAttractorTransform;
     //[SerializeField] private ParticleImage xpParticleEffectsPrefab;
 
+    [Header("Spawn Randomization")]
+    [SerializeField] private bool randomizeSpawnPosition = true;
+    [SerializeField] private float spawnOffsetRadius = 0.5f;
+    [SerializeField] private bool randomizeSpawnRotation = true;
+
     private List<GameObject> availableXPsToCollect;
 
     private void Awake()
@@ -28,7 +33,22 @@ public class XPSpawnController : MonoBehaviour
     
     public void SpawnXP(Vector3 position)
     {
-        var xpModel = Instantiate(xpPrefab, position, Quaternion.identity);
+        // Applica un offset casuale sul piano XZ attorno alla posizione fornita
+        Vector3 spawnPos = position;
+        if (randomizeSpawnPosition && spawnOffsetRadius > 0f)
+        {
+            Vector2 rnd = UnityEngine.Random.insideUnitCircle * spawnOffsetRadius;
+            spawnPos += new Vector3(rnd.x, 0f, rnd.y);
+        }
+
+        // Applica una rotazione casuale attorno all'asse Y se abilitato
+        Quaternion spawnRot = Quaternion.identity;
+        if (randomizeSpawnRotation)
+        {
+            spawnRot = Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f);
+        }
+
+        var xpModel = Instantiate(xpPrefab, spawnPos, spawnRot);
         xpModel.transform.parent = xpModelsParentContainer;
         availableXPsToCollect.Add(xpModel);
     }
