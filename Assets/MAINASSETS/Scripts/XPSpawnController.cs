@@ -16,7 +16,7 @@ public class XPSpawnController : MonoBehaviour
     [Header("Particle Effects")]
     [SerializeField] private RectTransform xpParticleEffectsParentContainer;
     [SerializeField] private RectTransform targetAttractorTransform;
-    [SerializeField] private ParticleImage xpParticleEffectsPrefab;
+    //[SerializeField] private ParticleImage xpParticleEffectsPrefab;
 
     private List<GameObject> availableXPsToCollect;
 
@@ -48,21 +48,28 @@ public class XPSpawnController : MonoBehaviour
                 xpToCollect.transform.DOMove(characterPosition, 0.05f).OnComplete(() =>
                 {
                     OnDestroyedXP(xpToCollect);
-                    SpawnParticleEffect(xpToCollect.transform.position);
+
+                    // Pubblica direttamente l'evento di raccolta XP perché
+                    // l'FX che prima lo pubblicava è stato rimosso.
+                    EventBus.Publish(new XPCollectEvent(1));
+
+                    // se vuoi riabilitare il VFX, ripristina qui l'instanziazione:
+                    // SpawnParticleEffect(xpToCollect.transform.position);
+
                     Destroy(xpToCollect);
                 });
             }
         }
     }
 
-    private void SpawnParticleEffect(Vector3 collectPosition)
-    {
-        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, collectPosition);
-        var xpParticleEffect = Instantiate(xpParticleEffectsPrefab,xpParticleEffectsParentContainer);
-        xpParticleEffect.attractorTarget = targetAttractorTransform;
-        xpParticleEffect.GetComponent<RectTransform>().position = screenPoint;
-        xpParticleEffect.Play();
-    }
+    //private void SpawnParticleEffect(Vector3 collectPosition)
+    //{
+    //    Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, collectPosition);
+    //    var xpParticleEffect = Instantiate(xpParticleEffectsPrefab,xpParticleEffectsParentContainer);
+    //    xpParticleEffect.attractorTarget = targetAttractorTransform;
+    //    xpParticleEffect.GetComponent<RectTransform>().position = screenPoint;
+    //    xpParticleEffect.Play();
+    //}
 
     private void OnDestroyedXP(GameObject xp)
     {
