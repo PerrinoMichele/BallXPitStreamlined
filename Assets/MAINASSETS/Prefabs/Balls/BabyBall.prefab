@@ -71,7 +71,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fde1af5f0846d114a9aed238ee1b8698, type: 2}
+  - {fileID: 2100000, guid: 6a1061b885302d1448dacf60c7bcb8ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -128,8 +128,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baa2c1ba052bd34fa14a586fd522d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  BallType: 0
   speed: 10
   magnetSpeed: 10
+  defaultDamage: 1
 --- !u!54 &-7618011211314105226
 Rigidbody:
   m_ObjectHideFlags: 0

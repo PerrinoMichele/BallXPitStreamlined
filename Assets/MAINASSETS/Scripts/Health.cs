@@ -42,8 +42,23 @@ public class Health : MonoBehaviour
         }
         else
         {
-            XPSpawnController.Instance.SpawnXP(transform.position);
-            Destroy(gameObject);
+            // Se è un nemico: spawn XP e distruggi
+            if (gameObject.CompareTag("Enemy"))
+            {
+                XPSpawnController.Instance.SpawnXP(transform.position);
+                Destroy(gameObject);
+            }
+            // Se è il player: riavvia la scena (minima modifica)
+            else if (gameObject.CompareTag("Player"))
+            {
+                // Disabilita input/ulteriori effetti se necessario (minimo cambiamento)
+                StartCoroutine(RestartSceneCoroutine());
+            }
+            else
+            {
+                // fallback generico
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -68,4 +83,10 @@ public class Health : MonoBehaviour
         isTakingDamage = false;
     }
 
+    private IEnumerator RestartSceneCoroutine()
+    {
+        // breve ritardo reale per permettere SFX/feedback; usa realtime per essere indipendente da timeScale
+        yield return new WaitForSecondsRealtime(0.5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }

@@ -43,6 +43,8 @@ public class DragMoveAmplified : MonoBehaviour
         {
             dragging = false;
             if (rb) rb.linearVelocity = Vector3.zero; // STOP movement
+            // ensure Z stays inside limits even when not dragging (prevents push-out by physics)
+            EnforceZLimits();
             return;
         }
 
@@ -70,5 +72,16 @@ public class DragMoveAmplified : MonoBehaviour
                 if (rb) rb.linearVelocity = Vector3.zero;
             }
         }
+
+        // enforce Z limits after all movement to guard against external pushes
+        EnforceZLimits();
+    }
+
+    private void EnforceZLimits()
+    {
+        Vector3 pos = transform.position;
+        // clamp Z to configured limits so enemies / physics can't push player out
+        pos.z = Mathf.Clamp(pos.z, zLimits.x, zLimits.y);
+        transform.position = pos;
     }
 }
